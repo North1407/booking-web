@@ -3,16 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\FirebaseService;
 
 class FirebaseController extends Controller
 {
-    protected $firebase;
 
-    public function __construct(FirebaseService $firebase)
-    {
-        $this->firebase = $firebase->getDatabase();
-    }
 
     public function storeData()
     {
@@ -24,7 +18,7 @@ class FirebaseController extends Controller
 
     public function getData()
     {
-        $data = $this->firebase->getReference('users')->getValue();
+        $data = $this->firebase->getReference('users/admin')->getValue();
         return response()->json($data);
     }
 }

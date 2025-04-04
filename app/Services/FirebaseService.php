@@ -22,4 +22,9 @@ class FirebaseService
     {
         return $this->database;
     }
+
+    public function login(string $username, string $password)
+    {
+
+    }
 }
