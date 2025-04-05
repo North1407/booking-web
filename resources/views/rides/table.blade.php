@@ -7,6 +7,19 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
+    <style>
+        /* Highlight row on hover */
+        table tbody tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Enable scrolling for the table */
+        .table-container {
+            max-height: 500px;
+            /* Adjust height as needed */
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,81 +27,96 @@
         <!-- Sidebar -->
         @include('layouts.sidebar')
 
-        <!-- Main Content -->
-        <div class="content flex-grow-1">
-
-
-
-            <!-- Rides Table -->
-            <div class="container">
-                <h1>Rides</h1>
-                <div class="mb-3">
-                    <a href="{{ route('rides.add') }}" class="btn btn-primary">Add Ride</a>
-                    </p>
-
-                    <table class="table table-bordered">
-                        <!-- ticket list -->
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Driver</th>
-                                <th>Time</th>
-                                <th>Price</th>
-                                <th>Seats</th>
-                                <th>Pickup</th>
-                                <th>Destination</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($rides as $ride)
+        <div class="main-content flex-grow-1" style="margin-top: 2%; margin-left: -15%;">
+            <!-- Main Content -->
+            <div class="content flex-grow-1">
+                <!-- Rides Table -->
+                <div class="container">
+                    <h1>Danh sách chuyến đi</h1>
+                    <div class="mb-3">
+                        <a href="{{ route('rides.add') }}" class="btn btn-primary">Thêm chuyến đi</a>
+                    </div>
+                    <div class="table-container">
+                        <table class="table table-bordered">
+                            <!-- ticket list -->
+                            <thead>
                                 <tr>
-                                    <td>{{ $ride['id'] }}</td>
-                                    <td>{{ $ride['company'] }}</td>
-                                    <td>{{ $ride['time'] }}</td>
-                                    <td>{{ $ride['price'] }}</td>
-                                    <td>{{ $ride['totalSeats'] }}</td>
-                                    <td>{{ $ride['pickup'] }}</td>
-                                    <td>{{ $ride['destination'] }}</td>
-                                    <td>{{ $ride['status'] }}</td>
-                                    <td>
-                                        @if ($ride['status'] === 'completed')
-                                            <button class="btn btn-success" disabled>
-                                                <i class="bi bi-check-circle-fill">Completed</i>
-                                            </button>
-                                        @else
-                                            <form action="{{ route('rides.edit', ['id' => $ride['id']]) }}" method="POST"
+                                    <th>ID</th>
+                                    <th>Tài xế</th>
+                                    <th>Giờ chạy</th>
+                                    <th>Giá vé</th>
+                                    <th>Số vé</th>
+                                    <th>Điểm bắt đầu</th>
+                                    <th>Điểm kết thúc</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($rides as $ride)
+                                    <tr>
+                                        <td>{{ $ride['id'] }}</td>
+                                        <td>{{ $ride['company'] }}</td>
+                                        <td>{{ $ride['time'] }}</td>
+                                        <td>{{ $ride['price'] }}</td>
+                                        <td>{{ $ride['totalSeats'] }}</td>
+                                        <td>{{ $ride['pickup'] }}</td>
+                                        <td>{{ $ride['destination'] }}</td>
+                                        <td>
+                                            @switch($ride['status'])
+                                                @case('completed')
+                                                    Hoàn thành
+                                                    @break
+                                                @case('upcoming')
+                                                    Chưa bắt đầu
+                                                    @break
+                                                @case('ongoing')
+                                                    Trong chuyến
+                                                    @break
+                                                @default
+                                                    Không xác định
+                                            @endswitch
+                                        </td>
+                                        <td>
+                                            @if ($ride['status'] === 'completed')
+                                                <button class="btn btn-success" disabled>
+                                                    <i class="bi bi-check-circle-fill">Đổi trạng thái</i>
+                                                </button>
+                                            @else
+                                                <form action="{{ route('rides.edit', ['id' => $ride['id']]) }}" method="POST"
+                                                    style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-secondary">
+                                                        <i class="bi bi-pencil-fill">Đổi trạng thái</i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            <a href="{{ route('rides.detail', ['id' => $ride['id']]) }}"
+                                                class="btn btn-info">
+                                                <i class="bi bi-eye-fill">Xem chi tiết</i>
+                                            </a>
+                                            <a href="{{ route('rides.edit', ['id' => $ride['id']]) }}"
+                                                class="btn btn-warning">
+                                                <i class="bi bi-pencil-square">Sửa</i>
+                                            </a>
+                                            <form action="{{ route('rides.delete', ['id' => $ride['id']]) }}" method="POST"
                                                 style="display:inline;">
                                                 @csrf
-                                                <button type="submit" class="btn btn-secondary">
-                                                    <i class="bi bi-pencil-fill">Change state</i>
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="bi bi-trash-fill">Xóa</i>
                                                 </button>
                                             </form>
-                                        @endif
-                                        <a href="{{ route('rides.detail', ['id' => $ride['id']]) }}" class="btn btn-info">
-                                            <i class="bi bi-eye-fill">View</i>
-                                        </a>
-                                        <a href="{{ route('rides.edit', ['id' => $ride['id']]) }}" class="btn btn-warning">
-                                            <i class="bi bi-pencil-square">Edit</i>
-                                        </a>
-                                        <form action="{{ route('rides.delete', ['id' => $ride['id']]) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">
-                                                <i class="bi bi-trash-fill">Delete</i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

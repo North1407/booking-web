@@ -16,18 +16,19 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container"
+        style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; max-width: 400px; margin: 50px auto;">
         <h1>Login</h1>
         <form id="loginForm">
             <div>
-                <label for="username">Username:</label>
+                <label for="username">Tài khoản:</label>
                 <input type="text" id="username" name="username" required>
             </div>
             <div>
-                <label for="password">Password:</label>
+                <label for="password">Mật khẩu:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit">Login</button>
+            <button type="submit">Đăng nhập</button>
         </form>
     </div>
 

@@ -14,6 +14,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 // Route hiển thị trang home sau khi đăng nhập thành công
 Route::get('/home', [AuthController::class, 'home'])->name('home');
+// Route xử lý đăng xuất
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/firebase/store', [FirebaseController::class, 'storeData']);
 Route::get('/firebase/data', [FirebaseController::class, 'getData']);
@@ -21,7 +23,7 @@ Route::get('/firebase/data', [FirebaseController::class, 'getData']);
 Route::get('/rides', [RideController::class, 'index'])->name('rides.index');
 Route::get('/rides/detail/{id}', [RideController::class, 'detailRide'])->name('rides.detail');
 
-Route::post('/rides/add', [RideController::class, 'addRide'])->name('rides.add');
+Route::match(['get', 'post'], '/rides/add', [RideController::class, 'addRide'])->name('rides.add');
 Route::post('/rides/update-status/{id}', [RideController::class, 'editRide'])->name('rides.edit');
 Route::delete('/rides/delete/{id}', [RideController::class, 'deleteRide'])->name('rides.delete');
 

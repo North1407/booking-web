@@ -29,6 +29,8 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             animation: fadeIn 0.5s ease-in-out;
+            border: 2px solid #007bff;
+            /* Add border */
         }
 
         @keyframes fadeIn {
@@ -109,21 +111,26 @@
 </head>
 
 <body>
-    <form action="{{ route('login.post') }}" method="POST">
-        @csrf <!-- Add this directive -->
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Login</button>
-    </form>
-    @if ($errors->has('login'))
-        <p style="color: red;">{{ $errors->first('login') }}</p>
-    @endif
+    <div class="container">
+        <h1>Login</h1>
+        <div id="error-message">Invalid username or password.</div>
+        <!-- Add CSRF token for security -->
+        <form action="{{ route('login.post') }}" method="POST">
+            @csrf <!-- Add this directive -->
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        @if ($errors->has('login'))
+            <p style="color: red;">{{ $errors->first('login') }}</p>
+        @endif
+    </div>
 </body>
 
 </html>

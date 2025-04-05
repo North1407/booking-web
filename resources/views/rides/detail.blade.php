@@ -15,9 +15,9 @@
         @include('layouts.sidebar')
 
         <!-- Main Content -->
-        <div class="content flex-grow-1">
+        <div class="content flex-grow-1" style="margin-top: 2%; margin-left: -15%;">
             <div class="container">
-                <h1>List Tickets</h1>
+                <h1>Danh sách vé</h1>
                 <!-- <div>
                     <p>Pickup: {{ $ride['pickup'] }} | Destination: {{ $ride['destination'] }} | Driver:
                         {{ $ride['company'] }}
@@ -31,15 +31,15 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Tên</th>
                             <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>Pickup Point</th>
-                            <th>Dropoff Point</th>
-                            <th>Payment Method</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Payment</th>
+                            <th>Số điện thoại</th>
+                            <th>Điển đón</th>
+                            <th>Điểm trả</th>
+                            <th>Phương thức TT</th>
+                            <th>Số vé</th>
+                            <th>Số tiền</th>
+                            <th>Đã thanh toán</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,7 +68,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <a href="{{ route('rides.index') }}" class="btn btn-primary">Back to Rides</a>
+                <a href="{{ route('rides.index') }}" class="btn btn-primary">Quay về</a>
             </div>
         </div>
     </div>
