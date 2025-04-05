@@ -49,4 +49,11 @@ class AuthController extends Controller
         $user = session('user');
         return view('home', compact('user')); // Tạo file home.blade.php trong thư mục views
     }
+
+    // Xử lý đăng xuất
+    public function logout(Request $request)
+    {
+        $request->session()->forget('user');
+        return redirect()->route('login'); // Chuyển hướng về trang đăng nhập
+    }
 }
