@@ -40,10 +40,10 @@ class RideController extends Controller
             $pickup = $this->firebase->getReference('locations/' . $request->input('pickup'))->getValue();
             $destination = $this->firebase->getReference('locations/' . $request->input('destination'))->getValue();
             if ($pickup['id'] == $destination['id']) {
-                return redirect()->back()->with('error', 'Pickup and destination cannot be the same!');
+                return redirect()->back()->withErrors(['error' => 'Điểm đón và điểm đến không được trùng nhau!']);
             }
             if (!$vehicle || !$pickup || !$destination) {
-                return redirect()->back()->with('error', 'Invalid vehicle or location selected!');
+                return redirect()->back()->withErrors(['error' => 'Xe hoặc địa điểm không hợp lệ!']);
             }
             $pickupPoints = array_filter($this->firebase->getReference('locations')->getValue(), function ($location) use ($request) {
                 return isset($location['parentId']) && $location['parentId'] == $request->input('pickup');
@@ -52,7 +52,7 @@ class RideController extends Controller
                 return isset($location['parentId']) && $location['parentId'] == $request->input('destination');
             });
             if (empty($pickupPoints) || empty($dropoffPoints)) {
-                return redirect()->back()->with('error', 'No pickup or dropoff points found!');
+                return redirect()->back()->withErrors(['error' => 'Không tìm thấy điểm đón hoặc điểm trả!']);
             }
 
             $tmpLocation = [
@@ -80,7 +80,7 @@ class RideController extends Controller
 
             $this->firebase->getReference('rides/' . $rideData['id'])->set($rideData);
 
-            return redirect()->route('rides.index')->with('success', 'Ride added successfully!');
+            return redirect()->route('rides.index')->with('success', 'Thêm chuyến đi thành công!');
         }
 
         $vehicles = $this->firebase->getReference('vehicles')->getValue();
@@ -111,7 +111,7 @@ class RideController extends Controller
                 $this->firebase->getReference('tickets/' . $ticketId)->update($ticket);
             }
         }
-        return redirect()->back()->with('success', 'Ride updated successfully!');
+        return redirect()->back()->with('success', 'Cập nhật chuyến đi thành công!');
     }
 
     public function deleteRide($id)
@@ -121,11 +121,11 @@ class RideController extends Controller
             if ($rideData['status'] == 'upcoming') {
                 $this->firebase->getReference('rides/' . $id)->remove();
             } else {
-                return redirect()->back()->with('error', 'Cannot delete ongoing or completed rides!');
+                return redirect()->back()->withErrors(['error' => 'Không thể xóa chuyến đi đã bắt đầu hoặc đã hoàn thành!']);
             }
         } else {
-            return redirect()->back()->with('error', 'Ride not found!');
+            return redirect()->back()->withErrors(['error' => 'Chuyến đi không tồn tại!']);
         }
-        return redirect()->back()->with('success', 'Ride deleted successfully!');
+        return redirect()->back()->with('success', 'Xóa chuyến đi thành công!');
     }
 }

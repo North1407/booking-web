@@ -29,6 +29,18 @@
 
         <div class="container" style="margin-top: 4%; margin-left: 1%;">
             <h2>Thêm chuyến đi</h2>
+
+            <!-- Display general error messages -->
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('rides.add') }}" method="POST">
                 @csrf
                 <div class="form-group mb-3">
@@ -38,6 +50,9 @@
                             <option value="{{ $carDetail['id'] }}">{{ $carDetail['name'] }}</option>
                         @endforeach
                     </select>
+                    @error('car_details')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="company">Tài xế</label>
@@ -46,10 +61,16 @@
                             <option value="{{ $driver['name'] }}">{{ $driver['name'] }}</option>
                         @endforeach
                     </select>
+                    @error('company')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="date">Ngày chạy</label>
                     <input type="date" class="form-control" id="date" name="date" required>
+                    @error('date')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="pickup">Điểm bắt đầu</label>
@@ -58,6 +79,9 @@
                             <option value="{{ $location['id'] }}">{{ $location['name'] }}</option>
                         @endforeach
                     </select>
+                    @error('pickup')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="destination">Điểm kết thúc</label>
@@ -66,21 +90,28 @@
                             <option value="{{ $location['id'] }}">{{ $location['name'] }}</option>
                         @endforeach
                     </select>
+                    @error('destination')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="price">Giá vé</label>
                     <input type="number" class="form-control" id="price" name="price" required>
+                    @error('price')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="time">Giờ chạy</label>
                     <input type="time" class="form-control" id="time" name="time" required>
+                    @error('time')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
                 <br>
                 <div style="text-align: center;"><button type="submit" class="btn btn-primary">Xác nhận</button></div>
             </form>
         </div>
-        </form>
-    </div>
     </div>
 </body>
 
