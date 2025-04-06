@@ -33,6 +33,22 @@
                 <!-- Rides Table -->
                 <div class="container">
                     <h1>Danh sách chuyến đi</h1>
+                    <!-- Display general error messages -->
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <!-- Display success message -->
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
                     <div class="mb-3">
                         <a href="{{ route('rides.add') }}" class="btn btn-primary">Thêm chuyến đi</a>
                     </div>
@@ -63,30 +79,24 @@
                                         <td>{{ $ride['pickup'] }}</td>
                                         <td>{{ $ride['destination'] }}</td>
                                         <td>
-                                            @switch($ride['status'])
-                                                @case('completed')
-                                                    Hoàn thành
-                                                    @break
-                                                @case('upcoming')
-                                                    Chưa bắt đầu
-                                                    @break
-                                                @case('ongoing')
-                                                    Trong chuyến
-                                                    @break
-                                                @default
-                                                    Không xác định
-                                            @endswitch
+                                            @if ($ride['status'] === 'completed')
+                                                <span class="text-success">Hoàn thành</span>
+                                            @elseif ($ride['status'] === 'upcoming')
+                                                <span>Chưa khởi hành</span>
+                                            @else
+                                                <span>Đang trong chuyến</span>
+                                            @endif
                                         </td>
                                         <td>
                                             @if ($ride['status'] === 'completed')
-                                                <button class="btn btn-success" disabled>
+                                                <button class="btn  btn-secondary" disabled>
                                                     <i class="bi bi-check-circle-fill">Đổi trạng thái</i>
                                                 </button>
                                             @else
                                                 <form action="{{ route('rides.edit', ['id' => $ride['id']]) }}" method="POST"
                                                     style="display:inline;">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-secondary">
+                                                    <button type="submit" class="btn btn-success">
                                                         <i class="bi bi-pencil-fill">Đổi trạng thái</i>
                                                     </button>
                                                 </form>
